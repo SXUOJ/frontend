@@ -1,7 +1,7 @@
 <template>
     <div>
         <img src="../img/images.png" style="display:inline-block;margin-left: 40px;">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" router> 
+        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router> 
             <el-menu-item index="/FrontPage" style="margin-left: 30px;"><i class="el-icon-s-home"></i>主页</el-menu-item>
             <el-menu-item index="/QuestionBank"><i class="el-icon-s-opportunity"></i>题库</el-menu-item>
             <el-menu-item index="/QuestionList"><i class="el-icon-notebook-2"></i>题单</el-menu-item>
