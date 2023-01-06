@@ -24,6 +24,7 @@
       // 调用store 存储
       ...mapMutations(['changeLogin']),
       login () {
+        this.$router.push('/FrontPage')
         let _this = this;
         if (this.loginForm.username === '' || this.loginForm.password === '') {
           alert('账号或密码不能为空');
