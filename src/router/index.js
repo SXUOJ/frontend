@@ -2,10 +2,15 @@ import VueRouter from 'vue-router'
 
 const routes = [
   {
-    path:'/',
+      path: '/',
+      redirect: '/login'
+  },
+  {
+    path:'/login',
     name:'login',
     component:()=> import('../views/LoginA.vue')
   },
+
   {
     path:'/page',
     name:'page',
