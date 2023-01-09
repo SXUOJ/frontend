@@ -42,4 +42,7 @@
     margin-left: 1250px;
     vertical-align: middle;
 }
+.CodeMirror-gutters{
+    border-left:6px solid rgb(37,139,137) !important;
+}
 </style>

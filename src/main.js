@@ -5,15 +5,19 @@ import 'element-ui/lib/theme-chalk/index.css'; // 2.2引入样式
 import router from '@/router/index.js'
 import VueRouter from 'vue-router'
 import store from './store';
+import axios from 'axios'
+import VueCodeMirror from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
 
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueRouter)
+Vue.use(VueCodeMirror)
 
-import axios from 'axios'
 axios.defaults.baseURL='http://127.0.0.1:4523'
 Vue.prototype.$axios = axios
+
 
 
 // 添加请求拦截器，在请求头中加token
