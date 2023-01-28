@@ -70,7 +70,7 @@
       // 调用store 存储
       ...mapMutations(['changeLogin']),
       login () {
-        this.$router.push('/FrontPage')
+        this.$router.replace('/FrontPage')     
         let _this = this;
         if (this.loginForm.username === '' || this.loginForm.password === '') {
           alert('账号或密码不能为空');
@@ -114,7 +114,7 @@
   </script>
   
 <style>
-   :root {
+:root {
     /* COLORS */
     --white: #e9e9e9;
     --gray: #333;
@@ -133,20 +133,7 @@
       Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
-  body {
-    align-items: center;
-    background-color: var(--white);
-    background: url(../img/planform.jpg);
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    display: grid;
-    height: 100vh;
-    place-items: center;
-    overflow: hidden;
-  }
-
+ 
   .form__title {
     font-weight: 300;
     margin: 0;

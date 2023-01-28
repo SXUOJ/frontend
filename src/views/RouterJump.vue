@@ -14,14 +14,13 @@ import topbar from '@/components/TopBar.vue'
 export default{
     components: {
         topbar
-  },
-    methods:{
-        tiao(){
-            this.$router.replace({
-            path:'/NavigationPage'
-            })
-            // window.location.href('NavigationPage.vue')
-        }
-    }
+  }
 }
 </script>
+
+<style>
+body {
+    background:none !important;
+    display:block !important
+  }
+</style>
