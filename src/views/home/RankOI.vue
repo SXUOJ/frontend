@@ -2,9 +2,11 @@
     <div class="box" ref="box">
     <el-scrollbar class="left" wrap-style="overflow-x:hidden;">
       <div>
-        <!--左侧div内容-->
-        <h1>到了时间你就一定要上场</h1>
-        <h1>当意识到达，那就必须上岸</h1>
+        <div style="margin-left:10px;width: 1000px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
+        <div style="margin-top:5px;margin-left:10px;width: 1000px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
+        <el-divider></el-divider>
+        <div style="white-space: pre-wrap;width: 1000px;">{{ description }}</div>
+        <div> 示例一：</div>
       </div>
     </el-scrollbar>
       <div class="resize" title="收缩侧边栏"></div>
@@ -52,7 +54,8 @@ import 'codemirror/addon/scroll/simplescrollbars'
                 theme: 'mdn-like', // 主题根据需要自行配置
                 matchBrackets: true, // 光标匹配括号
                 autoCloseBrackets:true, //自动补全括号
-            }
+            },
+            description:' 题目描述题目描述题目描述题目描述题目描述题目描述题目描述 \n 题目描述题目描述题目描述题目描述题目描述 \n 题目描述题目描述题目描述'
         }
     },
     methods: {
@@ -104,6 +107,8 @@ import 'codemirror/addon/scroll/simplescrollbars'
     mounted() {
       this.dragControllerDiv();
     },
+    created() {
+    }
   };
   </script>
   
@@ -155,5 +160,8 @@ import 'codemirror/addon/scroll/simplescrollbars'
   }
   .CodeMirror{
     border: none;
+  }
+  .el-divider--horizontal{
+    margin: 10px;
   }
   </style>
