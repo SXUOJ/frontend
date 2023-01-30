@@ -1,16 +1,14 @@
 <template>
     <div class="box" ref="box">
-    <el-scrollbar class="left" wrap-style="overflow-x:hidden;">
+    <div class="left" >
       <div>
-        <div style="margin-left:10px;width: 1000px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
-        <div style="margin-top:5px;margin-left:10px;width: 1000px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
+        <div style="margin-left:10px;width: 750px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
+        <div style="margin-top:5px;margin-left:10px;width: 750px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
         <el-divider></el-divider>
-        <div style="white-space: pre-wrap;width: 1000px;">{{ description }}</div>
-        <div> 示例一：</div>
       </div>
-    </el-scrollbar>
+    </div>
       <div class="resize" title="收缩侧边栏"></div>
-      <el-scrollbar class="mid" wrap-style="overflow-x:hidden;">
+      <el-scrollbar class="mid" >
         <div >
             <codemirror
             ref="newCm"  

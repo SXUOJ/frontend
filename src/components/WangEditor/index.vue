@@ -9,7 +9,7 @@
         />
         <!-- 编辑器 -->
         <Editor
-            style="height: 400px; overflow-y: hidden"
+            style="min-height: 400px; overflow-y: hidden"
             :defaultConfig="editorConfig"
             v-model="html"
             @onChange="onChange"
@@ -47,7 +47,7 @@
             'underline', 
             'italic', 
             'color', 
-            'bgColor', 
+            'bgColor',
             // '|', 
             'indent',  // 增加缩进
             'delIndent',  // 减少缩进
