@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <el-table
         ref="filterTable"
         :data="tableData"
@@ -104,3 +104,10 @@
       }
     }
   </script>
+
+  <style scoped>
+    .container {
+      width: 94%;
+      margin: 10px auto;
+    }
+  </style>
