@@ -106,6 +106,7 @@
       },
       onChange() {
         this.$emit('changeData', this.html)
+        console.log(this.editorConfig.uploadImage);
       },
     },
     created() {

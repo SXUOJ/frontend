@@ -15,7 +15,7 @@ Vue.use(ElementUI);
 Vue.use(VueRouter)
 Vue.use(VueCodeMirror)
 
-axios.defaults.baseURL='http://127.0.0.1:4523'
+axios.defaults.baseURL='http://oj.niuwx.cn'
 Vue.prototype.$axios = axios
 
 
@@ -24,7 +24,7 @@ Vue.prototype.$axios = axios
 axios.interceptors.request.use(
   config => {
     if (localStorage.getItem('token')) {
-      config.headers.token = localStorage.getItem('token');
+      config.headers.Authorization  = 'Bearer ' + localStorage.getItem('token');
     }
     return config;
   },

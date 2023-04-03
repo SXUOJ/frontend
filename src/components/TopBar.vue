@@ -8,7 +8,14 @@
             <el-menu-item index="/RankOI"><i class="el-icon-s-data"></i> 比赛</el-menu-item>
             <el-menu-item index="/HomeForum"> <i class="el-icon-s-comment"></i> 讨论</el-menu-item>
             <div class="demo-type">
-                <el-avatar> user </el-avatar>
+                <el-dropdown>
+                    <span class="el-dropdown-link">
+                        <div style="width: 100px;">{{ truename }}</div>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>修改密码</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
             </div>
         </el-menu>
     </div>
@@ -18,12 +25,24 @@
   export default {
     data() {
       return {
+        truename:''
       };
     },
     methods: {
     //   handleSelect(key, keyPath) {
         // console.log(key, keyPath);
     //   }
+    },
+    created(){
+        // 请求个人数据
+        this.$axios({
+            method: 'get',
+            url: '/api/user/get_user_info',
+          }).then(res => {
+            this.truename = res.data.info.truename
+          }).catch(error => {
+            console.log(error);
+          });
     }
   }
 </script>
@@ -39,10 +58,16 @@
 }
 .demo-type{
     position: absolute;
-    margin-left: 1250px;
+    margin-left: 900px;
     vertical-align: middle;
 }
 .CodeMirror-gutters{
     border-left:6px solid rgb(37,139,137) !important;
 }
+.el-dropdown-link {
+    text-align: center
+  }
+  .el-icon-arrow-down {
+    font-size: 16px;
+  }
 </style>

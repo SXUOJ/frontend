@@ -98,6 +98,17 @@ export default{
           name: 'SXU_acm'
         }]
       }
+    },
+    created(){
+      this.$axios({
+            method: 'get',
+            url: '/api/user/get_user_info',
+          }).then(res => {
+            console.log(res);
+          }).catch(error => {
+            alert('获取用户信息失败');
+            console.log(error);
+          });
     }
 }
 </script>

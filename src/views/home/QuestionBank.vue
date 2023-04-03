@@ -101,6 +101,16 @@
           console.log(`当前页: ${val}`);
           this.currentPage = val;
         }
-      }
+      },
+      created(){
+          this.$axios({
+            method: 'get',
+            url: '/api/question/get_list',
+          }).then(res => {
+            console.log(res);
+          }).catch(error => {
+            console.log(error);
+          });
+        },
     }
   </script>

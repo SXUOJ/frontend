@@ -5,52 +5,58 @@
       <input type="text" v-model="loginForm.password" placeholder="密码"/>
       <button @click="login">登录</button>
     </div> -->
-    <div class="container right-panel-active">
-      <!-- Sign Up -->
-      <div class="container__form container--signup">
-        <form action="#" class="form" id="form1" @submit="submit1">
-          <h2 class="form__title">Sign Up</h2>
-          <input type="text" placeholder="User" class="input" />
-          <input type="email" placeholder="Email" class="input" />
-          <input type="password" placeholder="Password" class="input" />
-          <button class="btn">Sign Up</button>
-        </form>
-      </div>
+    <div class="outer">
+      <div class="container right-panel-active">
+        <!-- Sign Up -->
+        <div class="container__form container--signup">
+          <form action="#" class="form" id="form1" @submit="submit1">
+            <h2 class="form__title">Sign Up</h2>
+            <input type="text" placeholder="truename" class="input" autocomplete="off" v-model="registerForm.truename"/>
+            <input type="email" placeholder="Email" class="input" autocomplete="off" v-model="registerForm.Email"/>
+            <input type="text" placeholder="username" class="input" autocomplete="off" v-model="registerForm.username"/>
+            <input type="password" placeholder="Password" class="input" autocomplete="off" v-model="registerForm.password"/>
+            <button class="btn" @click="register">Sign Up</button>
+          </form>
+        </div>
 
-      <!-- Sign In -->
-      <div class="container__form container--signin">
-        <form action="#" class="form" id="form2" @submit="submit2">
-          <h2 class="form__title">Sign In</h2>
-          <!-- <input type="email" placeholder="Email" class="input" /> -->
-          <input
-            type="text"
-            placeholder="User"
-            class="input"
-            v-model="loginForm.username"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            class="input"
-            v-model="loginForm.password"
-          />
-          <a href="#" class="link">Forgot your password?</a>
-          <button class="btn" @click="login">Sign In</button>
-        </form>
-      </div>
+        <!-- Sign In -->
+        <div class="container__form container--signin">
+          <form action="#" class="form" id="form2" @submit="submit2">
+            <h2 class="form__title">Sign In</h2>
+            <!-- <input type="email" placeholder="Email" class="input" /> -->
+            <input
+              type="text"
+              placeholder="username"
+              class="input"
+              v-model="loginForm.username"
+              autocomplete="off"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              class="input"
+              v-model="loginForm.password"
+              autocomplete="off"
+            />
+            <a href="#" class="link" @click="miss">Forgot your password?</a>
+            <button class="btn" @click="login">Sign In</button>
+          </form>
+        </div>
 
-      <!-- Overlay -->
-      <div class="container__overlay">
-        <div class="overlay">
-          <div class="overlay__panel overlay--right">
-            <button class="btn" id="signIn" @click="click1">Sign In</button>
-          </div>
-          <div class="overlay__panel overlay--left">
-            <button class="btn" id="signUp" @click="click2">Sign Up</button>
+        <!-- Overlay -->
+        <div class="container__overlay">
+          <div class="overlay">
+            <div class="overlay__panel overlay--right">
+              <button class="btn" id="signIn" @click="click1">Sign In</button>
+            </div>
+            <div class="overlay__panel overlay--left">
+              <button class="btn" id="signUp" @click="click2">Sign Up</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
   </template>
    
   <script>
@@ -62,6 +68,13 @@
           username: '',
           password: ''
         },
+        registerForm: {
+          username: '',
+          password: '',
+          truename:'',
+          Email:''
+
+        },
         userToken: ''
       };
     },
@@ -70,7 +83,6 @@
       // 调用store 存储
       ...mapMutations(['changeLogin']),
       login () {
-        this.$router.replace('/FrontPage')     
         let _this = this;
         if (this.loginForm.username === '' || this.loginForm.password === '') {
           alert('账号或密码不能为空');
@@ -81,19 +93,53 @@
             url: '/api/user/login',
             data:{"username":_this.loginForm.username,"password":_this.loginForm.password},
           }).then(res => {
-            console.log('123456');
             console.log(res);
-            _this.userToken = res.token;
-            // 将用户token保存到vuex中
-            _this.changeLogin({ token: _this.userToken });
-            // 用户登入成功,自动跳转至系统首页
-            _this.$router.push('/FrontPage');
-            alert('登陆成功');
+            if (res.data.code === 404) {
+              alert('账号或密码错误');
+            }
+            else{
+               _this.userToken = res.data.token;
+              // 将用户token保存到vuex中
+              _this.changeLogin({ token: _this.userToken });
+              // 用户登入成功,自动跳转至系统首页
+              _this.$router.push('/FrontPage');
+              alert('登陆成功');
+            }
+           
           }).catch(error => {
             alert('账号或密码错误');
             console.log(error);
           });
         }
+      },
+      register () {
+        let _this = this;
+        if (this.registerForm.username === '' || this.registerForm.password === '' || this.registerForm.Email === '' || this.registerForm.truename === '') {
+          alert('请在全部填写后注册');
+        } else {
+          // 发起登入请求
+          this.$axios({
+            method: 'post',
+            url: '/api/user/register',
+            data:{"username":_this.registerForm.username,"password":_this.registerForm.password,"usergroup":'0',"truename":_this.registerForm.truename,"email":_this.registerForm.Email,"school":'山西大学'},
+          }).then(res => {
+            console.log(res);
+            if (res.data.code==404) {
+              alert('此账号已存在');
+            }
+            else{
+              alert('注册成功');
+              const container = document.querySelector(".container");
+              container.classList.add("right-panel-active");
+            }
+          }).catch(error => {
+            alert('注册失败，请检查网络');
+            console.log(error);
+          });
+        }
+      },
+      miss(){
+        alert('开发中');
       },
       click1 () {
         const container = document.querySelector(".container");
@@ -133,6 +179,19 @@
       Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
+  .outer{
+    align-items: center;
+    background-color: #e9e9e9;
+    background: url(../img/planform.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: grid;
+    height: 100vh;
+    place-items: center;
+    overflow: hidden;
+  }
  
   .form__title {
     font-weight: 300;
