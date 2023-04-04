@@ -45,6 +45,11 @@ const routes = [
         path: '/RankOI',
         name: 'RankOI',
         component: () => import('../views/home/RankOI.vue'),
+      },
+      {
+        path: '/AddQuestion',
+        name: 'AddQuestion',
+        component: () => import('../views/home/AddQuestion.vue'),
       }]
   }
   

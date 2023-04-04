@@ -42,7 +42,7 @@
         <div class="block" style="margin-top:15px;">
             <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
             :current-page="currentPage" 
-            :page-sizes="[1,5,10,20]" 
+            :page-sizes="[15,20,25,30]" 
             :page-size="pageSize" 
             layout="total, sizes, prev, pager, next, jumper" 
             :total="tableData.length">
@@ -56,30 +56,10 @@
     export default {
       data() {
         return {
-          tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            tag: '已通过'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄',
-            tag: '未通过'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄',
-            tag: '已通过'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄',
-            tag: '未通过'
-          }],
+          tableData: [],
           currentPage: 1, // 当前页码
-          total: 20, // 总条数
-          pageSize: 2 // 每页的数据条数
+          total: 30, // 总条数
+          pageSize: 15 // 每页的数据条数
         }
       },
       methods: {
@@ -103,11 +83,18 @@
         }
       },
       created(){
+        var page = this.currentPage+''
+        var pageSize = this.pageSize+''
           this.$axios({
             method: 'get',
             url: '/api/question/get_list',
+            params:{
+              amount:pageSize,
+              page:page  
+            }
           }).then(res => {
             console.log(res);
+            this.tableData = res.data.question_list
           }).catch(error => {
             console.log(error);
           });
