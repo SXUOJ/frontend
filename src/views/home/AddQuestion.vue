@@ -12,55 +12,159 @@
             :readOnlys="readOnlys"
             @changeData="hChangeData"
             @uploadImg="hUploadImg"
+            ref="write"
           />
           </div>
+            <el-upload
+              class="upload-demo"
+              drag
+              accept=".rar,.zip"
+              :action="actionUrl"
+              :multiple="false"
+              :headers="headers"
+              :limit=1
+              :on-success="handleUploadSuccess"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传 .rar / .zip格式文件</div>
+          </el-upload>
+          <el-button type="primary" @click="sub">提交题目</el-button>
         </div>
       </el-scrollbar>
         <div class="resize" title="收缩侧边栏"></div>
         <el-scrollbar class="mid" wrap-style="overflow-x:hidden;">
+        <div style="width: 50px;">
+          <el-button @click="preview">预览</el-button>
+        </div> 
             <div style="margin-left:10px;width: 700px;"> 
             {{title}} &nbsp;&nbsp;&nbsp;&nbsp;
              标签：{{ tags }}</div>
             <div style="margin-top:5px;margin-left:10px;width: 700px;">等级：{{ level }} 时间限制：{{ time_limit }} 空间限制：{{ mem_limit }} </div>
           <el-divider></el-divider>
-          <div v-html="this.content"></div>
+          <!-- <div v-html="this.content"></div> -->
+          <editor-vue1 
+            :readOnlys="false"
+            @changeData="hChangeData"
+            @uploadImg="hUploadImg"
+            ref="read"
+          />
         </el-scrollbar>
-          
       </div>
   </template>
    
   <script>
   import editorVue from '../../components/WangEditor/index.vue'
+  import editorVue1 from '../../components/WangEditor/index1.vue'
 
    
   export default {
     components: {
       editorVue,
+      editorVue1
     },
     data() {
       return {
+        zip:'',
         title:'',
         tags:'',
         level:'',
         time_limit:'',
         mem_limit:'',
-        content:''
+        content:'',
+        readOnlys:true,
+        questionId:'',
+        actionUrl: 'http://oj.niuwx.cn/api/admin/upload/sample/' + this.questionId,
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
       };
     },
     methods: {
       hChangeData(editDataHtml){
         // 获取最新的html数据
         this.content = editDataHtml
-        console.log(this.content)
+        // this.$refs.read.html=editDataHtml
       },
+      preview(){
+        this.$refs.read.html=this.content
+      },
+      handleUploadSuccess(res, file) {
+      this.$message.success('上传' + file.name)
+      this.zip=file
+      },
+      //预览
+      handlePreview() {
+        this.$message.success('压缩文件无法预览！')
+      },
+      handleRemove(file, ) {
+        console.log(file);
+        var questionid = this.question
+        console.log(questionid)
+        this.$axios({
+          method: 'delete',
+          url: '/api/admin/question/delete/${questionid}',
+        }).then(res => {
+          console.log(res)
+          this.$message.success('移除' + file.name + '成功')
+        }).catch(err =>{
+          this.$message.warning('压缩包删除失败！')
+          console.log(err)
+        })
+      },
+
+      sub(){
+        var _this = this;
+        this.$axios({
+            method: 'post',
+            url: '/api/admin/question/create',
+            data:{
+              "title":_this.title,
+              "context.description":_this.content,
+              // "information.question_id":_this
+              "information":{
+                "level":_this.level,
+                "creator":'爽爽子',
+                "tags":_this.tags,
+              },
+              "limit":{
+                "time_limit":_this.time_limit,
+                "mem_limit":_this.mem_limit,
+              }
+             
+            },
+          }).then(res => {
+            _this.$axios({
+            method: 'post',
+            url: '/api/admin/upload/sample/'+res.data.questionId,
+            headers: {
+            'Content-Type':'multipart/form-data',
+            },
+            data:{
+              "samples":_this.zip,
+            },
+          }).then(res =>{
+            console.log(res);
+            this.$router.push('/FrontPage');
+            this.$message.success('题目创建成功')
+          }).catch(err=>{
+            console.log(err);
+          })  
+          }).catch(error => {
+            console.log(error);
+          });
+        
+    },
       hUploadImg(file,insertFn){
         console.log(file)
         // 插入图片，调接口返回图片url,通过插入conteng
-        let imgUrl = 'https://img1.baidu.com/it/u=608404415,1639465523&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800'
+        let imgUrl = file
         insertFn(imgUrl);
-      // 设置只读
-      this.readOnlys = true;
-      },
+        // 设置只读
+        this.readOnlys = true;
+        },
       dragControllerDiv() {
           var resize = document.getElementsByClassName("resize")[0];
           var left = document.getElementsByClassName("left");
@@ -100,8 +204,8 @@
             resize.setCapture && resize.setCapture(); //该函数在属于当前线程的指定窗口里设置鼠标捕获
             return false;
           };
+        }
         },
-    },
     mounted() {
         this.dragControllerDiv();
       },

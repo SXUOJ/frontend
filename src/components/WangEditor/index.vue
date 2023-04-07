@@ -21,6 +21,8 @@
    
   <script>
   import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+  // import { Message } from 'element-ui'
+
   export default {
     name: "editorVue",
     components: { Editor, Toolbar },
@@ -41,6 +43,8 @@
         toolbarConfig: {
           /* 显示哪些菜单，如何排序、分组 */ 
           toolbarKeys: [
+            'insertFormula', // “插入公式”菜单
+            // 'editFormula' // “编辑公式”菜单
             'headerSelect', 
             // '|', 
             'bold', 
@@ -70,7 +74,7 @@
             'divider', 
             'uploadImage', 
             'undo', 
-            'redo', 
+            'redo',
           ], 
           // excludeKeys: [ ], /* 隐藏哪些菜单 */ 
         },
@@ -80,12 +84,25 @@
           // readOnly: true, // 只读、不可编辑
           // 所有的菜单配置，都要在 MENU_CONF 属性下
           MENU_CONF: {
-            // 配置上传图片
-            uploadImage: {
-              customUpload: this.uploaadImg
-            },
+            // 图片上传
+          uploadImage: {
+            customUpload: this.uploaadImg,
+            fieldName: 'images',
+            // 单个文件的最大体积限制，默认为 2M
+            maxFileSize: 10 * 1024 * 1024, // 10M
+            // 最多可上传几个文件，默认为 100
+            maxNumberOfFiles: 10,
+            // 选择文件时的类型限制，默认为 ['image/*'] 。如不想限制，则设置为 []
+            allowedFileTypes: [],
+            // 跨域是否传递 cookie ，默认为 false
+            withCredentials: true,
+
+            // 超时时间，默认为 10 秒
+            timeout: 10 * 1000, //10 秒
+          }
           },
         },
+        
       };
     },
     watch: {
@@ -96,18 +113,66 @@
           }
         }
       },
+      
     },
     methods: {
+      isInArray(arr,value){
+        for(var i = 0; i < arr.length; i++){
+            if(value === arr[i]){
+                return true;
+            }
+        }
+        return false;
+      },
       uploaadImg(file, insertFn){
-        this.$emit('uploadImg', file, insertFn)
+        
+        return this.$axios({
+          method: 'post',
+          url: '/api/admin/upload/image/'+file.name,
+          data:{"images":file},
+          headers: {
+            'Content-Type':'multipart/form-data',
+          }
+        }).then(res => {
+          console.log(res)
+          this.$message.success('图片上传成功！')
+          this.$emit('uploadImg', res.data, insertFn)
+        }).catch(err =>{
+          this.$message.warning('图片上传失败！')
+          console.log(err)
+        })
       },
       onCreated(editor) {
         this.editor = Object.seal(editor);
       },
       onChange() {
         this.$emit('changeData', this.html)
-        console.log(this.editorConfig.uploadImage);
+        // 删除图片
+        var reg = /(?<=img src=").*?(?=" alt=)/g
+         var str = this.html.match(reg)
+         this.old = this.new;
+         this.new = str?str:[];
+         if(  this.old.length > this.new.length ){
+            for(let index in this.old){
+              if( this.isInArray(this.new,this.old[index]) == false ){
+                let imgName =  this.old[index].split("\\").slice(-1)
+                console.log(imgName);
+                // this.$api.get("deleteImg?fileName=" + imgName)
+                this.$axios({
+                  method: 'delete',
+                  url: '/api/admin/upload/image/${imgName}',
+                }).then(res => {
+                  console.log(res)
+                  this.$message.success('图片删除成功！')
+                }).catch(err =>{
+                  this.$message.warning('图片删除失败！')
+                  console.log(err)
+                })
+              }
+            }
+         }  
       },
+      
     },
     created() {
       this.html = this.content;

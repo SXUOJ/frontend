@@ -8,7 +8,11 @@ import store from './store';
 import axios from 'axios'
 import VueCodeMirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
+import { Boot } from '@wangeditor/editor'
+import formulaModule from '@wangeditor/plugin-formula'
 
+// 注册。要在创建编辑器之前注册，且只能注册一次，不可重复注册。
+Boot.registerModule(formulaModule)
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);

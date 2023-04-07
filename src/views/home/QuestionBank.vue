@@ -3,29 +3,35 @@
         <el-table
         ref="filterTable"
         :data="tableData"
+        stripe
         style="width: 100%">
         <el-table-column
-            prop="name"
+            prop="title"
             label="标题"
             width="180">
         </el-table-column>
         <el-table-column
-            prop="address"
+            prop="question_id"
             label="问题ID"
             :formatter="formatter">
         </el-table-column>
         <el-table-column
-            prop="address"
+            prop="creator"
             label="创建者"
-            :formatter="formatter">
+            :formatter="formatter1">
         </el-table-column>
         <el-table-column
-            prop="address"
+            prop="level"
             label="等级"
-            :formatter="formatter">
+            :formatter="formatter2">
         </el-table-column>
         <el-table-column
-            prop="tag"
+            prop="tags"
+            label="标签"
+            :formatter="formatter2">
+        </el-table-column>
+        <el-table-column
+            prop="if_ac"
             label="状态"
             width="100"
             :filters="[{ text: '已通过', value: '已通过' }, { text: '未通过', value: '未通过' }]"
@@ -33,8 +39,8 @@
             filter-placement="bottom-end">
             <template slot-scope="scope">
             <el-tag
-                :type="scope.row.tag === '已通过' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.tag}}</el-tag>
+                :type="scope.row.if_ac === '已通过' ? 'success' : 'primary'"
+                disable-transitions>{{scope.row.if_ac}}</el-tag>
             </template>
         </el-table-column>
         </el-table>
@@ -57,6 +63,7 @@
       data() {
         return {
           tableData: [],
+          info:[0,1,2,3],
           currentPage: 1, // 当前页码
           total: 30, // 总条数
           pageSize: 15 // 每页的数据条数
@@ -64,9 +71,17 @@
       },
       methods: {
         formatter(row) {
-          return row.address;
+          console.log(row);
+          return row.question_id;
+        },
+        formatter1(row) {
+          return row.creator;
+        },
+        formatter2(row) {
+          return row.level;
         },
         filterTag(value, row) {
+          console.log(value,row);
           return row.tag === value;
         },
         //每页条数改变时触发 选择一页显示多少行
@@ -74,7 +89,6 @@
           console.log(`每页 ${val} 条`);
           this.currentPage = 1;
           this.pageSize = val;
-          
         },
         //当前页改变时触发 跳转其他页
         handleCurrentChange(val) {
@@ -93,8 +107,20 @@
               page:page  
             }
           }).then(res => {
-            console.log(res);
             this.tableData = res.data.question_list
+            for (let index = 0; index < res.data.question_list.length; index++) {
+              this.tableData[index].title=res.data.question_list[index].title
+              this.tableData[index].question_id=res.data.question_list[index].info.question_id
+              this.tableData[index].creator=res.data.question_list[index].info.creator
+              this.tableData[index].level=res.data.question_list[index].info.level
+              this.tableData[index].tags=res.data.question_list[index].info.tags
+              if(this.tableData[index].if_ac){
+                this.tableData[index].if_ac='已通过'
+              }
+              else{
+                this.tableData[index].if_ac='未通过'
+              }
+            }
           }).catch(error => {
             console.log(error);
           });

@@ -10,9 +10,11 @@
   "dependencies": {
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^1.0.2",
+    "@wangeditor/plugin-formula": "^1.0.11",
     "axios": "^1.1.3",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.12",
+    "katex": "^0.16.4",
     "md5": "^2.3.0",
     "router": "^1.3.7",
     "vue": "^2.6.14",
