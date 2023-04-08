@@ -1,9 +1,11 @@
 <template>
     <div class="container">
         <el-table
-        ref="filterTable"
+        ref="singleTable"
         :data="tableData"
         stripe
+        highlight-current-row
+        @current-change="handleCurrentChange1"
         style="width: 100%">
         <el-table-column
             prop="title"
@@ -63,6 +65,7 @@
       data() {
         return {
           tableData: [],
+          currentRow: null,
           info:[0,1,2,3],
           currentPage: 1, // 当前页码
           total: 30, // 总条数
@@ -70,6 +73,14 @@
         }
       },
       methods: {
+        // setCurrent(row) {
+        //   this.$refs.singleTable.setCurrentRow(row);
+        // },
+        handleCurrentChange1(val) {
+          this.currentRow = val;
+          console.log(val.question_id);
+          this.$router.push(`/QuestionPage/${val.question_id}`);
+        },
         formatter(row) {
           console.log(row);
           return row.question_id;
@@ -108,6 +119,7 @@
             }
           }).then(res => {
             this.tableData = res.data.question_list
+            console.log(res.data);
             for (let index = 0; index < res.data.question_list.length; index++) {
               this.tableData[index].title=res.data.question_list[index].title
               this.tableData[index].question_id=res.data.question_list[index].info.question_id
@@ -130,7 +142,7 @@
 
   <style scoped>
     .container {
-      width: 94%;
+      width: 100%;
       margin: 10px auto;
     }
   </style>

@@ -50,6 +50,11 @@ const routes = [
         path: '/AddQuestion',
         name: 'AddQuestion',
         component: () => import('../views/home/AddQuestion.vue'),
+      },
+      {
+        path: '/QuestionPage/:question_id',
+        name: 'QuestionPage',
+        component: () => import('../views/home/QuestionPage.vue'),
       }]
   }
   

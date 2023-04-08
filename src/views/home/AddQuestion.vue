@@ -122,7 +122,9 @@
             url: '/api/admin/question/create',
             data:{
               "title":_this.title,
-              "context.description":_this.content,
+              "context":{
+                "description":_this.content
+              },
               // "information.question_id":_this
               "information":{
                 "level":_this.level,
