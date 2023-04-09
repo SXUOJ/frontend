@@ -2,8 +2,24 @@
     <div class="box" ref="box">
     <div class="left" >
       <div>
-        <div style="margin-left:10px;width: 750px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
-        <div style="margin-top:5px;margin-left:10px;width: 750px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
+        <!-- <div style="margin-left:10px;width: 750px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX&nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
+        <div style="margin-top:5px;margin-left:10px;width: 750px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; </div>
+        <div style="margin-top:5px;margin-left:10px;width: 750px;">时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB </div> -->
+        <table style="width: 700px; height: 60px; padding-left: 10px;">
+          <tr>
+          <td>标题</td>
+          <td>标签：XXXX</td>
+          <td>问题ID：100000000</td>
+          <td></td>
+        </tr>        
+        <tr>
+          <td>等级：省级</td>
+          <td>创建者：XXX</td>
+          <td>时间限制：1000ms</td>
+          <td>空间限制：1MB</td>
+        </tr>        
+        </table>
+        
         <el-divider></el-divider>
       </div>
     </div>
@@ -116,9 +132,9 @@ import 'codemirror/addon/scroll/simplescrollbars'
   .box {
     width: 100%;
     height: 82vh;
-    margin: 5vh 0px;
+    margin: 5vh 0 0 34px;
     overflow: hidden;
-    box-shadow: -1px 9px 10px 3px rgba(0, 0, 0, 0.11);
+    /* box-shadow: -1px 9px 10px 3px rgba(0, 0, 0, 0.11); */
   }
   /*左侧div样式*/
   .left {
