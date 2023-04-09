@@ -2,8 +2,9 @@
   <div class="box" ref="box">
     <el-scrollbar class="left" wrap-style="overflow-x:hidden;">
       <div>
-        <div style="margin-left:10px;width: 700px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
-        <div style="margin-top:5px;margin-left:10px;width: 700px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div>
+        <!-- <div style="margin-left:10px;width: 700px;">标题 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 标签：XXXX</div>
+        <div style="margin-top:5px;margin-left:10px;width: 700px;">等级：省级 &nbsp;&nbsp;&nbsp;&nbsp; 创建者：XXX &nbsp;&nbsp;&nbsp;&nbsp; 时间限制：1000ms &nbsp;&nbsp;&nbsp;&nbsp; 空间限制：1MB &nbsp;&nbsp;&nbsp;&nbsp; 问题ID：100000000</div> -->
+        <div style="font-size: 22px; color: #595959;">标题</div>
         <el-divider></el-divider>
         <div>
           <editor-vue 
@@ -137,9 +138,9 @@ export default {
   .box {
     width: 100%;
     height: 82vh;
-    margin: 5vh 0px;
+    margin: 5vh 0 0 5vh;
     overflow: hidden;
-    box-shadow: -1px 9px 10px 3px rgba(0, 0, 0, 0.11);
+    /* box-shadow: -1px 9px 10px 3px rgba(0, 0, 0, 0.11); */
   }
   /*左侧div样式*/
   .left {
