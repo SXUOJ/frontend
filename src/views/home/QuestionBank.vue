@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container1">
         <el-table
         ref="singleTable"
         :data="tableData"
@@ -141,7 +141,7 @@
   </script>
 
   <style scoped>
-    .container {
+    .container1 {
       width: 80%;
       margin: 10px auto;
     }
