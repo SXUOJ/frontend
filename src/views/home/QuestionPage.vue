@@ -9,7 +9,8 @@
             ref="read"
         />
         <el-divider></el-divider>
-        <el-button @click="submit">提交题目</el-button>
+        <el-button @click="submit" type="primary">提交题目</el-button>
+        <el-button @click="lookover" type="info">查看提交结果</el-button>
       </div>
     </div>
       <div class="resize" title="收缩侧边栏"></div>
@@ -67,12 +68,35 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
             tags:'',
             time_limit:'',
             mem_limit:'',
-            context:''
+            context:'',
+            question_id:''
         }
     },
     methods: {
+      lookover(){
+        this.$router.push(`/QuestionPage/MySubmission/${this.question_id}`)
+      },
         submit(){
-            console.log('提交');
+          var _this = this;
+            // 获取题目信息
+          this.$axios({
+            method: 'post',
+            url: '/api/question/submit',
+            data:{
+              "question_id":_this.question_id,
+              "source":_this.sql,
+              "code_type":'2',
+              "if_ac":'0',
+              "time_limit":_this.time_limit,
+              "memory_limit":_this.mem_limit
+            },
+          }).then(res => {
+            console.log(res);
+           
+          }).catch(error => {
+            console.log(error);
+          });
+        
         },
         dragControllerDiv() {
             var resize = document.getElementsByClassName("resize")[0];
@@ -124,6 +148,7 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
     },
     created() {
         console.log(this.$route.params.question_id);
+        this.question_id = this.$route.params.question_id
         var _this = this;
         // 获取题目数据
         this.$axios({
@@ -169,7 +194,7 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
     top: 45%;
     background-color: #d6d6d6;
     border-radius: 5px;
-    margin-top: -10px;
+    margin-top: -50px;
     width: 10px;
     height: 50px;
     background-size: cover;

@@ -8,8 +8,8 @@
         @current-change="handleCurrentChange1"
         style="width: 100%">
         <el-table-column
-            prop="title"
-            label="标题"
+            prop="submit_id"
+            label="提交ID"
             width="180">
         </el-table-column>
         <el-table-column
@@ -18,19 +18,9 @@
             :formatter="formatter">
         </el-table-column>
         <el-table-column
-            prop="creator"
-            label="创建者"
+            prop="time"
+            label="时间"
             :formatter="formatter1">
-        </el-table-column>
-        <el-table-column
-            prop="level"
-            label="等级"
-            :formatter="formatter2">
-        </el-table-column>
-        <el-table-column
-            prop="tags"
-            label="标签"
-            :formatter="formatter2">
         </el-table-column>
         <el-table-column
             prop="if_ac"
@@ -50,7 +40,7 @@
         <div class="block" style="margin-top:15px;">
             <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
             :current-page="currentPage" 
-            :page-sizes="[10,15,20,25,30]" 
+            :page-sizes="[15,20,25,30]" 
             :page-size="pageSize" 
             layout="total, sizes, prev, pager, next, jumper" 
             :total="tableData.length">
@@ -65,11 +55,12 @@
       data() {
         return {
           tableData: [],
+          question_ids: '',
           currentRow: null,
           info:[0,1,2,3],
           currentPage: 1, // 当前页码
           total: 30, // 总条数
-          pageSize: 10 // 每页的数据条数
+          pageSize: 15 // 每页的数据条数
         }
       },
       methods: {
@@ -78,18 +69,15 @@
         // },
         handleCurrentChange1(val) {
           this.currentRow = val;
-          console.log(val.question_id);
-          this.$router.push(`/QuestionPage/${val.question_id}`);
+          console.log(val.submit_id);
+          this.$router.push(`/SubmitResult/${val.submit_id}`);
         },
         formatter(row) {
           console.log(row);
           return row.question_id;
         },
         formatter1(row) {
-          return row.creator;
-        },
-        formatter2(row) {
-          return row.level;
+          return row.time;
         },
         filterTag(value, row) {
           console.log(value,row);
@@ -110,22 +98,18 @@
       created(){
         var page = this.currentPage+''
         var pageSize = this.pageSize+''
+        this.question_id = this.$route.params.question_id
           this.$axios({
             method: 'get',
-            url: '/api/question/get_list',
+            url: '/api/status/get_list_by_question_id/${this.question_id}',
             params:{
               amount:pageSize,
               page:page  
             }
           }).then(res => {
-            this.tableData = res.data.question_list
-            console.log(res.data);
-            for (let index = 0; index < res.data.question_list.length; index++) {
-              this.tableData[index].title=res.data.question_list[index].title
-              this.tableData[index].question_id=res.data.question_list[index].info.question_id
-              this.tableData[index].creator=res.data.question_list[index].info.creator
-              this.tableData[index].level=res.data.question_list[index].info.level
-              this.tableData[index].tags=res.data.question_list[index].info.tags
+            console.log(res.data.result_list);
+            this.tableData = res.data.result_list
+            for (let index = 0; index < res.data.result_list.length; index++) {
               if(this.tableData[index].if_ac){
                 this.tableData[index].if_ac='已通过'
               }

@@ -37,9 +37,9 @@ const routes = [
         component: () => import('../views/home/QuestionBank.vue'),
       },
       {
-        path: '/QuestionList',
-        name: 'QuestionList',
-        component: () => import('../views/home/QuestionList.vue'),
+        path: '/SubmitResult/:submit_id',
+        name: 'SubmitResult',
+        component: () => import('../views/home/SubmitResult.vue'),
       },
       {
         path: '/RankOI',
@@ -55,6 +55,11 @@ const routes = [
         path: '/QuestionPage/:question_id',
         name: 'QuestionPage',
         component: () => import('../views/home/QuestionPage.vue'),
+      },
+      {
+        path: '/QuestionPage/MySubmission/:question_id',
+        name: 'MySubmission',
+        component: () => import('../views/home/MySubmission.vue'),
       }]
   }
   

@@ -138,6 +138,7 @@
              
             },
           }).then(res => {
+            console.log(res.data.questionId);
             _this.$axios({
             method: 'post',
             url: '/api/admin/upload/sample/'+res.data.questionId,
