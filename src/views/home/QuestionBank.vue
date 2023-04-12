@@ -45,6 +45,14 @@
                 disable-transitions>{{scope.row.if_ac}}</el-tag>
             </template>
         </el-table-column>
+        <el-table-column label="操作" v-if="auth">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click.stop="deleteRow(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
         </el-table>
 
         <div class="block" style="margin-top:15px;">
@@ -64,6 +72,7 @@
     export default {
       data() {
         return {
+          auth:1,
           tableData: [],
           currentRow: null,
           info:[0,1,2,3],
@@ -76,6 +85,18 @@
         // setCurrent(row) {
         //   this.$refs.singleTable.setCurrentRow(row);
         // },
+        deleteRow(index, rows) {
+          console.log(index,rows);
+          this.$axios({
+            method: 'DELETE',
+            url: '/api/admin/question/delete/'+rows.question_id,
+          }).then(res => {
+            console.log(res.data);
+            rows.splice(index, 1);
+          }).catch(error => {
+            console.log(error);
+          });
+        },
         handleCurrentChange1(val) {
           this.currentRow = val;
           console.log(val.question_id);
