@@ -6,6 +6,7 @@
             <el-input v-model="title" placeholder="请输入标题" style="width: 150px;"></el-input>
              标签：<el-input v-model="tags" placeholder="请输入标签" style="width: 150px;"></el-input></div>
           <div style="margin-top:5px;margin-left:10px;width: 700px;">等级：<el-input v-model="level" placeholder="请输入等级" style="width: 150px;"></el-input> 时间限制：<el-input v-model="time_limit" placeholder="请输入时间限制" style="width: 150px;"></el-input>空间限制：<el-input v-model="mem_limit" placeholder="请输入空间限制" style="width: 150px;"></el-input></div>
+          <div>右侧只显示标题，其余在题目列表显示</div>
           <el-divider></el-divider>
           <div>
             <editor-vue 
@@ -40,9 +41,8 @@
           <el-button @click="preview">预览</el-button>
         </div> 
             <div style="margin-left:10px;width: 700px;"> 
-            {{title}} &nbsp;&nbsp;&nbsp;&nbsp;
-             标签：{{ tags }}</div>
-            <div style="margin-top:5px;margin-left:10px;width: 700px;">等级：{{ level }} 时间限制：{{ time_limit }} 空间限制：{{ mem_limit }} </div>
+            {{title}} 
+            </div>
           <el-divider></el-divider>
           <!-- <div v-html="this.content"></div> -->
           <editor-vue1 
