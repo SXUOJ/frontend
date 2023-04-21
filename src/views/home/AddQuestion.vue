@@ -219,6 +219,12 @@
     mounted() {
         this.dragControllerDiv();
       },
+      created() {
+        if (this.$store.state.usergroup =='0') {
+          alert("您没有管理员权限")
+          this.$router.replace('/FrontPage');
+        }
+      }
   };
   </script>
   
