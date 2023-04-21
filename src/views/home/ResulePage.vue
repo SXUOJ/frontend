@@ -312,42 +312,42 @@ import 'codemirror/addon/scroll/simplescrollbars'
 
   /* 测试点表格 */
   .el-table .Accepted {
-    background: #b9dec9;
+    background: rgb(185, 222, 201, 0.2);
   }
 
   .el-table .WrongAnswer {
-    background: #bc6880;
+    background: rgb(188, 104, 128, 0.2);
   }
   .el-table .CompileError {
-    background: #E39E36;
+    background: rgb(227, 158, 54, 0.2);
   }
 
   .el-table .RuntimeError {
-    background: #cbb9b6;
+    background: rgb(203, 185, 182, 0.2);
   }
   .el-table .TimeLimitExceed {
-    background: #aaa9a6;
+    background: rgb(170, 169, 166, 0.2);
   }
 
   .el-table .MemoryLimitExceed {
-    background: #c9bd82;
+    background: rgb(201, 189, 130, 0.2);
   }
   .el-table .OutputLimitExceed {
-    background: #8aa1ab;
+    background: rgb(138, 161, 171, 0.2);
   }
 
   .el-table .PresentationError {
-    background: #bc9965;
+    background: rgb(188, 153, 101, 0.2);
   }
   
   .el-table .SystemError {
-    background: #6595a4;
+    background: rgb(101, 149, 164, 0.2);
   }
   .el-table .UnkownError {
-    background: #f1d5ab;
+    background: rgb(241, 213, 171, 0.2);
   }
   .el-table .Success {
-    background: #89b2df;
+    background: rgb(137, 178, 223, 0.2);
   }
 
 
