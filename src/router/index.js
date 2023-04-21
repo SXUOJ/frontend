@@ -21,11 +21,11 @@ const routes = [
         name: 'FrontPage',
         component: () => import('../views/home/FrontPage.vue')
       },
-      {
-        path: '/HomeForum',
-        name: 'HomeForum',
-        component: () => import('../views/home/HomeForum.vue')
-      },
+      // {
+      //   path: '/HomeForum',
+      //   name: 'HomeForum',
+      //   component: () => import('../views/home/HomeForum.vue')
+      // },
       {
         path: '/HomePage',
         name: 'HomePage',
@@ -36,16 +36,11 @@ const routes = [
         name: 'QuestionBank',
         component: () => import('../views/home/QuestionBank.vue'),
       },
-      {
-        path: '/SubmitResult/:submit_id',
-        name: 'SubmitResult',
-        component: () => import('../views/home/SubmitResult.vue'),
-      },
-      {
-        path: '/RankOI',
-        name: 'RankOI',
-        component: () => import('../views/home/RankOI.vue'),
-      },
+      // {
+      //   path: '/RankOI',
+      //   name: 'RankOI',
+      //   component: () => import('../views/home/RankOI.vue'),
+      // },
       {
         path: '/AddQuestion',
         name: 'AddQuestion',
@@ -60,6 +55,11 @@ const routes = [
         path: '/QuestionPage/MySubmission/:question_id',
         name: 'MySubmission',
         component: () => import('../views/home/MySubmission.vue'),
+      },
+      {
+        path: '/QuestionPage/MySubmission/Result/:submit_id',
+        name: 'MySubmission',
+        component: () => import('../views/home/ResulePage.vue'),
       }]
   }
   

@@ -6,7 +6,9 @@ const store = new Vuex.Store({
  
   state: {
     // 存储token
-    token: localStorage.getItem('token') ? localStorage.getItem('token') : ''
+    token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
+    // 用户组 判断权限
+    usergroup: localStorage.getItem('usergroup') ? localStorage.getItem('usergroup') : ''
   },
  
   mutations: {
@@ -14,6 +16,10 @@ const store = new Vuex.Store({
     changeLogin (state, user) {
       state.token = user.token;
       localStorage.setItem('token', user.token);
+    },
+    changeUserGroup (state, user) {
+      state.usergroup = user.usergroup;
+      localStorage.setItem('usergroup', user.usergroup);
     }
   }
 });

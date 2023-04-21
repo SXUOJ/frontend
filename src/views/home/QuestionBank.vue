@@ -1,5 +1,11 @@
 <template>
     <div class="container1">
+      <input 
+        type="text"
+        v-model="search"
+        class="search"
+        placeholder="输入题目名称搜索"/>
+      <el-button icon="el-icon-search" circle @click="ques_search" class="butt"></el-button>
         <el-table
         ref="singleTable"
         :data="tableData"
@@ -45,7 +51,8 @@
                 disable-transitions>{{scope.row.if_ac}}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column label="操作" v-if="auth">
+        
+        <el-table-column label="操作"  v-if="this.$store.state.usergroup !='0'">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -54,14 +61,14 @@
           </template>
         </el-table-column>
         </el-table>
-
+ 
         <div class="block" style="margin-top:15px;">
             <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
             :current-page="currentPage" 
             :page-sizes="[10,15,20,25,30]" 
             :page-size="pageSize" 
             layout="total, sizes, prev, pager, next, jumper" 
-            :total="tableData.length">
+            :total="total">
             </el-pagination>
         </div>
     </div>
@@ -73,6 +80,7 @@
       data() {
         return {
           auth:1,
+          search:'',
           tableData: [],
           currentRow: null,
           info:[0,1,2,3],
@@ -92,6 +100,8 @@
             url: '/api/admin/question/delete/'+rows.question_id,
           }).then(res => {
             console.log(res.data);
+            alert('删除成功');
+            this.info1()
             rows.splice(index, 1);
           }).catch(error => {
             console.log(error);
@@ -121,42 +131,80 @@
           console.log(`每页 ${val} 条`);
           this.currentPage = 1;
           this.pageSize = val;
+          this.info1()
         },
         //当前页改变时触发 跳转其他页
         handleCurrentChange(val) {
           console.log(`当前页: ${val}`);
           this.currentPage = val;
-        }
+          this.info1()
+        },
+        ques_search(){
+          var page = this.currentPage+''
+          var pageSize = this.pageSize+''
+            this.$axios({
+              method: 'get',
+              url: '/api/question/search',
+              params:{
+                amount:pageSize,
+                page:page,
+                keyword:this.search
+              }
+            }).then(res => {
+              this.tableData = res.data.question_list
+              this.total = res.data.amount
+              console.log(res.data);
+              for (let index = 0; index < res.data.question_list.length; index++) {
+                this.tableData[index].title=res.data.question_list[index].title
+                this.tableData[index].question_id=res.data.question_list[index].info.question_id
+                this.tableData[index].creator=res.data.question_list[index].info.creator
+                this.tableData[index].level=res.data.question_list[index].info.level
+                this.tableData[index].tags=res.data.question_list[index].info.tags
+                if(this.tableData[index].if_ac){
+                  this.tableData[index].if_ac='已通过'
+                }
+                else{
+                  this.tableData[index].if_ac='未通过'
+                }
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        },
+        info1(){
+          var page = this.currentPage+''
+          var pageSize = this.pageSize+''
+            this.$axios({
+              method: 'get',
+              url: '/api/question/get_list',
+              params:{
+                amount:pageSize,
+                page:page  
+              }
+            }).then(res => {
+              this.tableData = res.data.question_list
+              this.total = res.data.amount
+              console.log(res.data);
+              for (let index = 0; index < res.data.question_list.length; index++) {
+                this.tableData[index].title=res.data.question_list[index].title
+                this.tableData[index].question_id=res.data.question_list[index].info.question_id
+                this.tableData[index].creator=res.data.question_list[index].info.creator
+                this.tableData[index].level=res.data.question_list[index].info.level
+                this.tableData[index].tags=res.data.question_list[index].info.tags
+                if(this.tableData[index].if_ac){
+                  this.tableData[index].if_ac='已通过'
+                }
+                else{
+                  this.tableData[index].if_ac='未通过'
+                }
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+          }
       },
       created(){
-        var page = this.currentPage+''
-        var pageSize = this.pageSize+''
-          this.$axios({
-            method: 'get',
-            url: '/api/question/get_list',
-            params:{
-              amount:pageSize,
-              page:page  
-            }
-          }).then(res => {
-            this.tableData = res.data.question_list
-            console.log(res.data);
-            for (let index = 0; index < res.data.question_list.length; index++) {
-              this.tableData[index].title=res.data.question_list[index].title
-              this.tableData[index].question_id=res.data.question_list[index].info.question_id
-              this.tableData[index].creator=res.data.question_list[index].info.creator
-              this.tableData[index].level=res.data.question_list[index].info.level
-              this.tableData[index].tags=res.data.question_list[index].info.tags
-              if(this.tableData[index].if_ac){
-                this.tableData[index].if_ac='已通过'
-              }
-              else{
-                this.tableData[index].if_ac='未通过'
-              }
-            }
-          }).catch(error => {
-            console.log(error);
-          });
+          this.info1()
         },
     }
   </script>
@@ -165,5 +213,21 @@
     .container1 {
       width: 80%;
       margin: 10px auto;
+    }
+    .search{
+      width: 60%;
+      line-height: 40px;
+      font-size: 16px;
+      margin: 15px auto;
+      position: relative;
+      left: 20%; /*偏移*/
+      text-align: center;
+      border-radius: 20px;
+      border: 1px solid black;
+    }
+    
+    .butt{
+      position: relative;
+      left: 20%;
     }
   </style>

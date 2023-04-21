@@ -37,19 +37,19 @@ axios.interceptors.request.use(
   });
  
 // 添加响应拦截器，移除token
-axios.interceptors.response.use(
-  response =>{
-    return response;
-  },
-  error=>{
-    if(error.response){
-      switch(error.response.status){
-        case 500:
-          localStorage.removeItem('token');
-          this.$router.push('/login');
-      }
-    }
-  })
+// axios.interceptors.response.use(
+//   response =>{
+//     return response;
+//   },
+//   error=>{
+//     if(error.response){
+//       switch(error.response.status){
+//         case 500:
+//           localStorage.removeItem('token');
+//           this.$router.push('/login');
+//       }
+//     }
+//   })
 
 new Vue({
   router,

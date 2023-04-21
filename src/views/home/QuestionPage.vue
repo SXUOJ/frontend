@@ -10,7 +10,7 @@
         />
         <el-divider></el-divider>
         <el-button @click="submit" type="primary">提交题目</el-button>
-        <el-button @click="lookover" type="info">查看提交结果</el-button>
+        <el-button @click="submit_result" type="info">查看提交结果</el-button>
       </div>
     </div>
       <div class="resize" title="收缩侧边栏"></div>
@@ -24,6 +24,58 @@
             </codemirror>
         </div>
       </el-scrollbar>
+      <el-drawer
+      title="提交结果"
+      :visible.sync="table"
+      direction="rtl"
+      size="50%">
+      <el-table
+        ref="singleTable"
+        :data="gridData"
+        stripe
+        highlight-current-row
+        @current-change="handleCurrentChange1"
+        style="width: 100%">
+        <el-table-column
+            prop="submit_id"
+            label="提交ID"
+            width="180">
+        </el-table-column>
+        <el-table-column
+            prop="question_id"
+            label="问题ID"
+            :formatter="formatter">
+        </el-table-column>
+        <el-table-column
+            prop="time"
+            label="时间"
+            :formatter="formatter1">
+        </el-table-column>
+        <el-table-column
+            prop="if_ac"
+            label="状态"
+            width="100"
+            :filters="[{ text: '已通过', value: '已通过' }, { text: '未通过', value: '未通过' }]"
+            :filter-method="filterTag"
+            filter-placement="bottom-end">
+            <template slot-scope="scope">
+            <el-tag
+                :type="scope.row.if_ac === '已通过' ? 'success' : 'primary'"
+                disable-transitions>{{scope.row.if_ac}}</el-tag>
+            </template>
+        </el-table-column>
+        </el-table>
+
+        <div class="block" style="margin-top:15px;">
+            <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+            :current-page="currentPage" 
+            :page-sizes="[10,15,20]" 
+            :page-size="pageSize" 
+            layout="total, sizes, prev, pager, next, jumper" 
+            :total="total">
+            </el-pagination>
+        </div>
+    </el-drawer>
     </div>
   </template>
   
@@ -42,6 +94,7 @@ import 'codemirror/addon/scroll/simplescrollbars.css'
 import 'codemirror/addon/scroll/simplescrollbars'
 //富文本框 左下方描述
 import editorVue1 from '../../components/WangEditor/index1.vue'
+
  
   export default {
     components: {
@@ -69,15 +122,51 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
             time_limit:'',
             mem_limit:'',
             context:'',
-            question_id:''
+            question_id:'',
+            table: false,
+            currentPage: 1, // 当前页码
+            total: 20, // 总条数
+            pageSize: 10, // 每页的数据条数
+            gridData: [{
+              date: '2016-05-02',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+              date: '2016-05-04',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+              date: '2016-05-03',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1518 弄'
+            }],
         }
     },
     methods: {
-      lookover(){
-        this.$router.push(`/QuestionPage/MySubmission/${this.question_id}`)
+      
+      handleCurrentChange1(val) {
+        this.currentRow = val;
+        console.log(val,1);
+        const { href } = this.$router.resolve( `/QuestionPage/MySubmission/Result/${val.submit_id}`);
+        window.open(href, '_blank');
+      },
+      submit_result(){
+        if(this.gridData == null){
+          this.$notify.info({
+          title: '消息',
+          message: '还没有进行过提交'
+        })}
+        else{
+          this.table = true
+        }
       },
         submit(){
           var _this = this;
+          console.log(localStorage.getItem('token'))
             // 获取题目信息
           this.$axios({
             method: 'post',
@@ -92,9 +181,25 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
             },
           }).then(res => {
             console.log(res);
-           
+            if (res.data.code == 2000 || res.data.code == 404) {
+              this.$notify.info({
+              title: '消息',
+              message: '提交失败,可能超时'
+              })
+            }
+            else{
+              this.$notify.info({
+                title: '消息',
+                message: '提交成功'
+              })
+              this.rueult_date()
+            } 
           }).catch(error => {
             console.log(error);
+            this.$notify.info({
+              title: '消息',
+              message: '提交失败'
+            })
           });
         
         },
@@ -141,7 +246,57 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
         onCmReady() {
         // 设置代码编辑框宽和高
         this.$refs.newCm.codemirror.setSize("-webkit-fill-available", "auto")
-        }
+        },
+        formatter(row) {
+          console.log(row);
+          return row.question_id;
+        },
+        formatter1(row) {
+          return row.time;
+        },
+        filterTag(value, row) {
+          console.log(value,row);
+          return row.tag === value;
+        },
+        //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+          this.currentPage = 1;
+          this.pageSize = val;
+          this.rueult_date()
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+          this.rueult_date()
+        },
+        rueult_date(){
+        var _this = this;
+        var page = this.currentPage+''
+        var pageSize = this.pageSize+''
+        this.$axios({
+          method: 'get',
+          url: `/api/status/get_list_by_question_id/${_this.$route.params.question_id}`,
+          params:{
+            amount:pageSize,
+            page:page  
+          }
+        }).then(res => {
+          this.total = res.data.amount
+          this.gridData = res.data.result_list
+          for (let index = 0; index < res.data.result_list.length; index++) {
+            if(this.gridData[index].if_ac){
+              this.gridData[index].if_ac='已通过'
+            }
+            else{
+              this.gridData[index].if_ac='未通过'
+            }
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      },
     },
     mounted() {
       this.dragControllerDiv();
@@ -165,6 +320,7 @@ import editorVue1 from '../../components/WangEditor/index1.vue'
           }).catch(error => {
             console.log(error);
           });
+          this.rueult_date()
     }
   };
   </script>

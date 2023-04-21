@@ -94,6 +94,9 @@
       handleUploadSuccess(res, file) {
       this.$message.success('上传' + file.name)
       this.zip=file
+      console.log(res)
+      console.log('--------------')
+      console.log(file)
       },
       //预览
       handlePreview() {
@@ -151,7 +154,11 @@
           }).then(res =>{
             console.log(res);
             this.$router.push('/FrontPage');
-            this.$message.success('题目创建成功')
+            this.$message({
+              showClose: true,
+              message:'题目创建成功',
+              type:'success'
+            })
           }).catch(err=>{
             console.log(err);
           })  

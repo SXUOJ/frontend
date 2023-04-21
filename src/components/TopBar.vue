@@ -4,10 +4,9 @@
         <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router active-text-color="#118d85"> 
             <el-menu-item index="/FrontPage"><i class="el-icon-s-home"></i>主页</el-menu-item>
             <el-menu-item index="/QuestionBank"><i class="el-icon-s-opportunity"></i>题库</el-menu-item>
-            <el-menu-item index="/QuestionList"><i class="el-icon-notebook-2"></i>提交结果</el-menu-item>
-            <el-menu-item index="/RankOI"><i class="el-icon-s-data"></i> 比赛</el-menu-item>
-            <el-menu-item index="/HomeForum"> <i class="el-icon-s-comment"></i> 讨论</el-menu-item>
-            <el-menu-item index="/AddQuestion"> <i class="el-icon-s-comment"></i> 添加题目</el-menu-item>
+            <!-- <el-menu-item index="/RankOI"><i class="el-icon-s-data"></i> 比赛</el-menu-item>
+            <el-menu-item index="/HomeForum"> <i class="el-icon-s-comment"></i> 讨论</el-menu-item> -->
+            <el-menu-item index="/AddQuestion" v-if="this.$store.state.usergroup !='0'"> <i class="el-icon-s-comment" ></i> 添加题目</el-menu-item>
             <div class="demo-type">
                 <el-dropdown>
                     <span class="el-dropdown-link">

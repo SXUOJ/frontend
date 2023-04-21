@@ -56,8 +56,9 @@
 </template>
 
 <script>
-
+  import { mapMutations } from 'vuex';
 export default{
+  
     data() {
       return {
         tableData: [{
@@ -99,12 +100,20 @@ export default{
         }]
       }
     },
+    methods:{
+      ...mapMutations(['changeUserGroup']),
+    },
     created(){
+      
+      var _this = this;
       this.$axios({
             method: 'get',
             url: '/api/user/get_user_info',
           }).then(res => {
             console.log(res);
+            var usergroup = res.data.info.usergroup;
+            // 将用户组保存到vuex中
+            _this.changeUserGroup({ usergroup: usergroup });
           }).catch(error => {
             alert('获取用户信息失败');
             console.log(error);
